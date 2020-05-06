@@ -13,6 +13,10 @@ namespace MvcTestingSample.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
+        public HomeController()
+        {
+        }
+
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
