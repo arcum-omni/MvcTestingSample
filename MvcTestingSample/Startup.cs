@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MvcTestingSample.Models;
+using MvcTestingSample.Models.Interfaces;
 
 namespace MvcTestingSample
 {
@@ -28,6 +29,9 @@ namespace MvcTestingSample
             services.AddDbContext<ProductDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ProductTestingDb")));
 
             services.AddControllersWithViews();
+
+            // register service:
+            services.AddScoped<IProductRepository, EFProductRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
