@@ -15,12 +15,13 @@ namespace MvcTestingSample.Controllers
 
         public HomeController()
         {
+
         }
 
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
+        //public HomeController(ILogger<HomeController> logger)
+        //{
+        //    _logger = logger;
+        //}
 
         public IActionResult Index()
         {
