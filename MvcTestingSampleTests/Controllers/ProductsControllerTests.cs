@@ -17,17 +17,26 @@ namespace MvcTestingSample.Controllers.Tests
         [TestMethod()]
         public async Task Index_ReturnsViewResult_WithListOfAllProducts()
         {
-            // *** Arrange *** //
+            // Arrange
             Mock<IProductRepository> mockRepo = new Mock<IProductRepository>();
             mockRepo.Setup(repo => repo.GetAllProductsAsync()).ReturnsAsync(GetProducts());
 
             var prodController = new ProductsController(mockRepo.Object);
 
-            // *** Act     *** //
+            // Act
             IActionResult result = await prodController.Index();
 
-            // *** Assert  *** //
+            // Assert, Ensure View Returned
             Assert.IsInstanceOfType(result, typeof(ViewResult));
+            ViewResult viewResult = result as ViewResult;
+
+            // Assert, List<Product> passed to view
+            var model = viewResult.ViewData.Model;
+            Assert.IsInstanceOfType(model, typeof(List<Product>));
+
+            // Assert, Ensure all products ar passed to view
+            List<Product> productModel = model as List<Product>;
+            Assert.AreEqual(4, productModel.Count);
         }
 
         private List<Product> GetProducts()
