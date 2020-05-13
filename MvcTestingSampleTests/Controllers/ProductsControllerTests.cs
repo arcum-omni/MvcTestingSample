@@ -61,5 +61,54 @@ namespace MvcTestingSample.Controllers.Tests
                 }
             };
         }
+
+        [TestMethod()]
+        public void Add_Get_ReturnsViewResult()
+        {
+            // Arrange
+            Mock<IProductRepository> mockRepo = new Mock<IProductRepository>();
+            var controller = new ProductsController(mockRepo.Object);
+
+            // Act
+            var result = controller.Add();
+
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(ViewResult));
+        }
+
+        [TestMethod]
+        public async Task AddPost_ReturnsRedirectAddsProduct_WhenModelstateIsValid()
+        {
+            String assertMessageOne = "Return value should be a RedirectToAction";
+            String assertMessageTwo = "Controller name should not be specifiec in the redirect";
+            String assertMessageThree = "User should be redirected to index";
+
+            Product p = new Product()
+            {
+                ProductName = "microController",
+                ProductPrice = "14.99"
+            };
+
+            // Arrange
+            var mockRepo = new Mock<IProductRepository>();
+            mockRepo.Setup(repo => repo.AddProductAsync(It.IsAny<Product>()))
+                    .Returns(Task.CompletedTask)
+                    .Verifiable();
+            // Act
+            var controller = new ProductsController(mockRepo.Object);
+            var result = await controller.Add(p);
+
+            // Assert, Ensure user is redirected after successfully adding a product
+            Assert.IsInstanceOfType(result, typeof(RedirectToActionResult), assertMessageOne);
+
+            // Assert, Ensure controller name is not specified in RTA
+            var redirectResult = result as RedirectToActionResult;
+            Assert.IsNull(redirectResult.ControllerName,assertMessageTwo);
+
+            // Assert, Ensrue redirect to Index Action
+            Assert.AreEqual("Index", redirectResult.ActionName, assertMessageThree);
+
+            mockRepo.Verify();
+        }
     }
 }
