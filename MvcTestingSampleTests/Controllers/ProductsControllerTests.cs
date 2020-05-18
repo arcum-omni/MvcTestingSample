@@ -120,7 +120,7 @@ namespace MvcTestingSample.Controllers.Tests
             var invalidProduct = new Product()
             {
                 ProductID = 1,
-                ProductName = null, // Name is required to be valid
+                ProductName = string.Empty, // Name is required to be valid
                 ProductPrice = "9.99"
             };
 
