@@ -11,6 +11,7 @@ namespace MvcTestingSample.Models
         [Key]
         public int ProductID { get; set; }
 
+        [Required]
         public string ProductName { get; set; }
 
         public string ProductPrice { get; set; }
