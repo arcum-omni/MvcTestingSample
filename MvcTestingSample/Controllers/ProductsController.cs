@@ -34,7 +34,7 @@ namespace MvcTestingSample.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(Product p)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid) 
             {
                 await _repo.AddProductAsync(p);
                 return RedirectToAction("Index");

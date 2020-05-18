@@ -110,5 +110,36 @@ namespace MvcTestingSample.Controllers.Tests
 
             mockRepo.Verify();
         }
+
+        [TestMethod]
+        public async Task AddPost_ReturnsViewWithModel_WhenModelStateIsInvalid()
+        {
+            // Arrange
+            var mockRepo = new Mock<IProductRepository>();
+            var controller = new ProductsController(mockRepo.Object);
+            var invalidProduct = new Product()
+            {
+                ProductID = 1,
+                ProductName = null, // Name is required to be valid
+                ProductPrice = "9.99"
+            };
+
+            // Should mark model state as invalid
+            controller.ModelState.AddModelError("Name", "Required");
+
+            // Act
+            IActionResult result = await controller.Add(invalidProduct);
+
+            // Assert, Ensure view is returned
+            Assert.IsInstanceOfType(result, typeof(ViewResult));
+
+            // Assert, Ensure model bound to product
+            ViewResult viewResult = result as ViewResult;
+            Assert.IsInstanceOfType(viewResult.Model, typeof(Product));
+
+            // Assert, ensure invalid prod is passed back to view
+            Product modelBoundProduct = viewResult.Model as Product;
+            Assert.AreEqual(invalidProduct, modelBoundProduct, "Invalid product should be passed back to view");
+        }
     }
 }
