@@ -20,6 +20,7 @@ namespace MvcTestingSample.Controllers.Tests
             IActionResult result = myController.Index();
 
             Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(ViewResult), "Index should return a view result");
         }
     }
 }
